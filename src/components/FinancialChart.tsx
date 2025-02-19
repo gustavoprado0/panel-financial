@@ -25,7 +25,7 @@ const data: DataPoint[] = [
 
 export default function FinancialChart() {
   return (
-    <div className="w-full p-4 shadow-xl bg-white dark:bg-gray-800 dark:text-white rounded-lg">
+    <div className="w-full p-4 shadow-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 dark:text-white rounded-lg">
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={data}>
           <CartesianGrid

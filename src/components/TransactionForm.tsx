@@ -41,7 +41,7 @@ export default function TransactionForm({ onTransactionAdded }: { onTransactionA
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4 p-6 bg-white  shadow-xl dark:bg-gray-800 rounded-lg"
+      className="space-y-4 p-6 bg-white  shadow-xl dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"
     >
       <div>
         <label className="block text-sm text-black dark:text-white">Descrição</label>
