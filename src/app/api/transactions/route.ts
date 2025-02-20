@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 
 const transactions = [
-  { id: 1, description: "Salário", amount: 5000, type: "income" },
-  { id: 2, description: "Aluguel", amount: -1200, type: "expense" },
+  { id: 1, description: "Salário", amount: 5000, type: "dispesas" },
+  { id: 2, description: "Aluguel", amount: -1200, type: "receitas" },
 ];
 
 export async function GET(req: Request) {

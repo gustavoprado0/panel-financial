@@ -1,57 +1,117 @@
 "use client";
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  TooltipProps,
+} from "recharts";
 
 type DataPoint = {
   name: string;
-  income: number;
-  expense: number;
+  despesas: number;
+  receitas: number;
+};
+
+type DataPointStyle = {
+  nameStyle?: React.CSSProperties;
+  despesasStyle?: React.CSSProperties;
+  receitasStyle?: React.CSSProperties;
 };
 
 const data: DataPoint[] = [
-  { name: "Jan", income: 4000, expense: 1200 },
-  { name: "Fev", income: 3000, expense: 800 },
-  { name: "Mar", income: 2000, expense: 1500 },
-  { name: "Abr", income: 2780, expense: 1900 },
-  { name: "Mai", income: 1890, expense: 1200 },
-  { name: "Jun", income: 2390, expense: 1500 },
-  { name: "Jul", income: 2390, expense: 1500 },
-  { name: "Ago", income: 2390, expense: 7500 },
-  { name: "Set", income: 2390, expense: 11500 },
-  { name: "Out", income: 2390, expense: 3500 },
-  { name: "Nov", income: 2390, expense: 8500 },
-  { name: "Dez", income: 2390, expense: 1500 },
+  { name: "Jan", despesas: 4000, receitas: 1200 },
+  { name: "Fev", despesas: 3000, receitas: 800 },
+  { name: "Mar", despesas: 2000, receitas: 1500 },
+  { name: "Abr", despesas: 2780, receitas: 1900 },
+  { name: "Mai", despesas: 1890, receitas: 1200 },
+  { name: "Jun", despesas: 2390, receitas: 1500 },
+  { name: "Jul", despesas: 2390, receitas: 1500 },
+  { name: "Ago", despesas: 2390, receitas: 7500 },
+  { name: "Set", despesas: 2390, receitas: 11500 },
+  { name: "Out", despesas: 2390, receitas: 3500 },
+  { name: "Nov", despesas: 2390, receitas: 8500 },
+  { name: "Dez", despesas: 2390, receitas: 1500 },
 ];
+
+const styles: DataPointStyle = {
+  nameStyle: { fontWeight: "bold", color: "blue" },
+  despesasStyle: { color: "red" },
+  receitasStyle: { color: "green", fontWeight: "bold" },
+};
+
+const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="p-2 shadow-lg bg-white border border-gray-300 rounded-lg">
+        <p style={styles.nameStyle}>{payload[0]?.payload?.name}</p>
+        <p style={styles.despesasStyle}>
+          Despesas: R$ {payload[0]?.value?.toLocaleString("pt-BR")}
+        </p>
+        {payload[1] && (
+          <p style={styles.receitasStyle}>
+            Receitas: R$ {payload[1]?.value?.toLocaleString("pt-BR")}
+          </p>
+        )}
+      </div>
+    );
+  }
+  return null;
+};
 
 export default function FinancialChart() {
   return (
     <div className="w-full p-4 shadow-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 dark:text-white rounded-lg">
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={data}>
-          <CartesianGrid
-            strokeDasharray="3 3"
-            stroke="#ddd"
-            className="dark:stroke-gray-600"
-          />
+          <CartesianGrid strokeDasharray="3 3" stroke="#ddd" />
           <XAxis
             dataKey="name"
-            stroke="#333"
-            className="dark:stroke-gray-300"
+            stroke="#fff" // Branco para contraste em fundo escuro
+            tick={({ x, y, payload }) => (
+              <text
+                x={x}
+                y={y}
+                dy={10}
+                textAnchor="middle"
+                className="fill-black dark:fill-white font-semibold text-sm" // Melhor contraste e legibilidade
+              >
+                {payload.value}
+              </text>
+            )}
           />
-          <YAxis stroke="#333" className="dark:stroke-gray-300" />
-          <Tooltip />
+          <YAxis
+            stroke="#fff" 
+            tick={({ x, y, payload }) => (
+              <text
+                x={x}
+                y={y}
+                dy={4}
+                textAnchor="end"
+                className="fill-black dark:fill-white font-semibold text-sm"
+              >
+                {payload.value}
+              </text>
+            )}
+          />
+
+          <Tooltip content={<CustomTooltip />} />
           <Line
             type="monotone"
-            dataKey="income"
-            stroke="#4CAF50"  
+            dataKey="despesas"
+            stroke="#4CAF50"
             strokeWidth={2}
             dot={{ stroke: "#4CAF50", strokeWidth: 2, fill: "#4CAF50" }}
             activeDot={{ r: 8, fill: "#4CAF50" }}
           />
           <Line
             type="monotone"
-            dataKey="expense"
-            stroke="#FF5722"  
+            dataKey="receitas"
+            stroke="#FF5722"
             strokeWidth={2}
             dot={{ stroke: "#FF5722", strokeWidth: 2, fill: "#FF5722" }}
             activeDot={{ r: 8, fill: "#FF5722" }}
